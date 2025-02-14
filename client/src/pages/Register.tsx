@@ -1,10 +1,10 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
-import { register } from '../api/registerAPI'; // Assuming you have a register function
+import { signUp } from '../api/signUpAPI';
 import { Link } from 'react-router-dom';
 import type { UserRegister } from '../interfaces/UserRegister';
 
-const Signup = () => {
-  const [signupData, setSignupData] = useState<UserRegister>({
+const Register = () => {
+  const [registerData, setRegisterData] = useState<UserRegister>({
     name: '',
     username: '',
     password: '',
@@ -15,8 +15,8 @@ const Signup = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSignupData({
-      ...signupData,
+    setRegisterData({
+      ...registerData,
       [name]: value,
     });
   };
@@ -25,16 +25,16 @@ const Signup = () => {
     e.preventDefault();
 
     // Ensure passwords match
-    if (signupData.password !== signupData.confirmPassword) {
+    if (registerData.password !== registerData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
     try {
-      await register({
-        name: signupData.name,
-        username: signupData.username,
-        password: signupData.password,
+      await signUp({
+        name: registerData.name,
+        username: registerData.username,
+        password: registerData.password,
       });
 
     } catch (err) {
@@ -54,7 +54,7 @@ const Signup = () => {
             className='form-input'
             type='text'
             name='name'
-            value={signupData.name}
+            value={registerData.name}
             onChange={handleChange}
             placeholder='Enter your full name'
             required
@@ -66,7 +66,7 @@ const Signup = () => {
             className='form-input'
             type='email'
             name='username'
-            value={signupData.username}
+            value={registerData.username}
             onChange={handleChange}
             placeholder='Enter your email'
             required
@@ -78,7 +78,7 @@ const Signup = () => {
             className='form-input'
             type='password'
             name='password'
-            value={signupData.password}
+            value={registerData.password}
             onChange={handleChange}
             placeholder='Enter a password'
             required
@@ -90,7 +90,7 @@ const Signup = () => {
             className='form-input'
             type='password'
             name='confirmPassword'
-            value={signupData.confirmPassword}
+            value={registerData.confirmPassword}
             onChange={handleChange}
             placeholder='Re-enter your password'
             required
@@ -106,4 +106,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Register;
