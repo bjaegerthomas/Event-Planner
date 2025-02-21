@@ -2,10 +2,10 @@ import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import Auth from '../utils/auth';
 import { login } from '../api/authAPI';
-import type { UserLogin } from '../interfaces/UserLogin';
+import type { User } from '../interfaces/User';
 
 const Login = () => {
-  const [loginData, setLoginData] = useState<UserLogin>({
+  const [loginData, setLoginData] = useState<User>({
     username: '',
     password: '',
   });
@@ -64,7 +64,7 @@ const Login = () => {
       </form>
       <div className='form-group'>
         <button className='btn btn-secondary' type='button'>
-        <Link to='/register-account'>Create an Account</Link>
+          <Link to='/register-account'>Create an Account</Link>
         </button>
       </div>
     </div>
