@@ -1,10 +1,10 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { signUp } from '../api/signUpAPI';
 import { Link } from 'react-router-dom';
-import type { UserRegister } from '../interfaces/UserRegister';
+import type { User } from '../interfaces/User';
 
 const Register = () => {
-  const [registerData, setRegisterData] = useState<UserRegister>({
+  const [registerData, setRegisterData] = useState<User>({
     name: '',
     username: '',
     password: '',

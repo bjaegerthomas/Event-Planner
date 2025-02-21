@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import type { rsvp } from "../interfaces/rsvp";
+import type { RSVP } from "../interfaces/RSVP";
 
 
 const RSVP = () => {
   const { token } = useParams<{ token: string }>();
-  const [rsvp, setRsvp] = useState<rsvp | null>(null);
+  const [rsvp, setRsvp] = useState<RSVP | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<string | null>(null);

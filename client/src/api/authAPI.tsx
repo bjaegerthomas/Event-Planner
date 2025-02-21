@@ -1,4 +1,4 @@
-import type { UserLogin } from '../interfaces/UserLogin';
+import type { UserLogin } from '../interfaces/User';
 
 const login = async (userInfo: UserLogin) => {
   try {
