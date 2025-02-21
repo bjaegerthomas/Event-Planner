@@ -35,10 +35,6 @@ const router = createBrowserRouter([
         element: <Create />,
       },
       {
-        path: '/view-event',
-        element: <View />,
-      },
-      {
         path: "/rsvp/:token", // Add RSVP route here
         element: <RSVP />,
       },
