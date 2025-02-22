@@ -62,11 +62,6 @@ const Login = () => {
           </button>
         </div>
       </form>
-      <div className='form-group'>
-        <button className='btn btn-secondary' type='button'>
-          <Link to='/register-account'>Create an Account</Link>
-        </button>
-      </div>
     </div>
   );
 };
