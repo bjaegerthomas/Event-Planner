@@ -9,7 +9,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="nav-title">
-        <Link to='/'>
+        <Link to='/create'>
           <h2>Create Event</h2>
         </Link>
       </div>
