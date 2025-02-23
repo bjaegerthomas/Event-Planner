@@ -1,44 +1,28 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+// Defines the Event model for database storage
+import { DataTypes } from 'sequelize';
+import sequelize from './database.js';
 
-const Event = sequelize.define(
-  'Event',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    event_title: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    event_description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    created_by: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users', // Use table name as a string to prevent circular dependency
-        key: 'id',
-      },
-      onDelete: 'CASCADE',
-    },
-    active: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    },
-    date_updated: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
+const Event = sequelize.define('Event', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true // Unique identifier for each event
   },
-  {
-    timestamps: false,
-    tableName: 'Events', // Explicitly defining table name
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false // Event must have a title
+  },
+  description: {
+    type: DataTypes.TEXT // Optional event description
+  },
+  createdBy: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'Users', // References the Users table
+      key: 'id'
+    }
   }
-);
+});
 
-module.exports = Event;
+export default Event;

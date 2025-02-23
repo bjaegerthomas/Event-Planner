@@ -1,17 +1,15 @@
--- Insert sample users
-INSERT INTO users (username, email, password) VALUES
-('Alice Johnson', 'alice@example.com', '$2b$10$KIX/LvC3f.JH6H4C0aVbDOQQF61rEzHzYIN0x1BBoOjX52q.VPbK2'), -- hashed password: "password123"
-('Bob Smith', 'bob@example.com', '$2b$10$KIX/LvC3f.JH6H4C0aVbDOQQF61rEzHzYIN0x1BBoOjX52q.VPbK2'),
-('Charlie Brown', 'charlie@example.com', '$2b$10$KIX/LvC3f.JH6H4C0aVbDOQQF61rEzHzYIN0x1BBoOjX52q.VPbK2');
+-- Connect to the correct database
+\c event_planner_db;
 
--- Insert sample events
-INSERT INTO events (event_title, event_description, created_by) VALUES
-('Team Meeting', 'Monthly team sync-up meeting.', 1),
-('Birthday Party', 'Celebrating Alice’s birthday!', 2),
-('Conference', 'Annual tech conference with speakers and workshops.', 3);
+-- Insert sample users into the Users table
+-- The passwords should be hashed before inserting in a real application
+INSERT INTO Users (id, email, password) VALUES
+(gen_random_uuid(), 'user1@example.com', 'hashedpassword1'), -- First user with a placeholder hashed password
+(gen_random_uuid(), 'user2@example.com', 'hashedpassword2'); -- Second user with a placeholder hashed password
 
--- Insert RSVPs (varying responses)
-INSERT INTO rsvps (event_id, guest_email, rsvp_link, status) VALUES
-(1, 'guest1@example.com', 'http://yourfrontend.com/rsvp/12345abc', 'YES'),
-(2, 'guest2@example.com', 'http://yourfrontend.com/rsvp/67890def', 'NO'),
-(3, 'guest3@example.com', 'http://yourfrontend.com/rsvp/11223xyz', 'PENDING');
+-- Insert sample events into the Events table
+-- The createdBy field references an existing user ID to associate events with users
+INSERT INTO Events (id, title, description, createdBy) VALUES
+(gen_random_uuid(), 'Team Meeting', 'Discuss project updates', (SELECT id FROM Users LIMIT 1)), -- Event created by the first user
+(gen_random_uuid(), 'Birthday Party', 'Celebrate John’s birthday', (SELECT id FROM Users ORDER BY createdAt DESC LIMIT 1)), -- Event created by the most recently added user
+(gen_random_uuid(), 'Workshop', 'Learn about new tech trends', (SELECT id FROM Users OFFSET 1 LIMIT 1)); -- Event created by the second user
