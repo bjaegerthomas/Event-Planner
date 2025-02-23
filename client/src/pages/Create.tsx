@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { createEvent } from "../api/events"; // Import the API function
 
 const Create = () => {
   const [event, setEvent] = useState({
@@ -19,10 +19,10 @@ const Create = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/events", event);
+      await createEvent(event); // Use the extracted function
       navigate("/"); // Redirect to Home page after successful creation
     } catch (error) {
-      console.error("Error creating event", error);
+      console.error(error);
     }
   };
 
