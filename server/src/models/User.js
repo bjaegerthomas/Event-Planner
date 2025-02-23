@@ -1,39 +1,25 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+// Defines the User model for database storage
+import { DataTypes } from 'sequelize';
+import sequelize from './database.js';
 
-const User = sequelize.define(
-  'User',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    password_hash: {
-      type: DataTypes.STRING, // Use STRING instead of TEXT for hashing consistency
-      allowNull: false,
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true // Unique identifier for each user
   },
-  {
-    timestamps: false, // Disabling default `createdAt` and `updatedAt`
-    tableName: 'Users', // Explicit table name for clarity
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true, // Ensures email is unique in the database
+    validate: {
+      isEmail: true // Ensures valid email format
+    }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false // Stores hashed password for security
   }
-);
+});
 
-module.exports = User;
+export default User;
