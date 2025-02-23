@@ -13,6 +13,16 @@ export const fetchEvents = async () => {
   }
 };
 
+// Create a new event
+export const createEvent = async (event) => {
+  try {
+    await axios.post(API_URL, event);
+  } catch (error) {
+    console.error("Error creating event", error);
+    throw error;
+  }
+};
+
 // Update an event
 export const updateEvent = async (id, updatedEvent) => {
   try {
