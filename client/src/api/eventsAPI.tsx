@@ -1,15 +1,9 @@
 import axios from 'axios';
 import AuthService from '../utils/auth.ts';
-import type { Event } from '../interfaces/events.ts';
+import type { Event } from '../interfaces/event.tsx';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/events';
 
-export interface Event {
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-}
 
 // Fetch all events
 export const fetchEvents = async () => {
@@ -45,6 +39,19 @@ export const deleteEvent = async (id: string) => {
     return id;
   } catch (error) {
     console.error('Error deleting event:', error);
+    throw error;
+  }
+};
+
+// implement Updating events w/authenticated
+export const updateEvent = async (id: string | number, event: any) => {
+  try {
+    const token = AuthService.getToken();
+    await axios.put(`${API_URL}/${id}`, event, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (error) {
+    console.error('Error updating event:', error);
     throw error;
   }
 };
