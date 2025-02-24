@@ -1,4 +1,4 @@
-import type { UserRegister } from '../interfaces/UserRegister';
+import type { UserRegister } from '../interfaces/userRegister.ts';
 
 const signUp = async (userInfo: UserRegister) => {
   try {

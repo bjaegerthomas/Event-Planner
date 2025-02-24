@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchEvents, updateEvent, deleteEvent } from "../api/events"; // Import API functions
+import { fetchEvents, updateEvent, deleteEvent } from "../api/eventsAPI"; // Import API functions
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -21,7 +21,7 @@ const Home = () => {
     loadEvents();
   }, []);
 
-  const handleUpdate = (event) => {
+  const handleUpdate = (event: any) => {
     setEditingEvent(event);
   };
 
@@ -39,7 +39,7 @@ const Home = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string | number) => {
     try {
       await deleteEvent(id);
       setEvents(events.filter(event => event.id !== id));
