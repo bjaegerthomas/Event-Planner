@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-import { fetchEvents, updateEvent, deleteEvent } from "../api/eventsAPI"; // Import API functions
-import type { Event } from "../interfaces/event"; // Import Event interface
+import { fetchEvents, updateEvent, deleteEvent } from "../api/eventsAPI";
+import type { Event } from "../interfaces/event";
 
 const Home = () => {
-  const [events, setEvents] = useState<Event[]>([] as Event[]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingEvent, setEditingEvent] = useState<Partial<Event>>();
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   useEffect(() => {
     const loadEvents = async () => {
       try {
-        const data = await fetchEvents() as Event[];
-        setEvents(data);
+        const data = await fetchEvents();
+        setEvents(data as Event[]);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching events:", error);
       } finally {
         setLoading(false);
       }
@@ -22,34 +22,32 @@ const Home = () => {
     loadEvents();
   }, []);
 
-  const handleUpdate = (event: any) => {
+  const handleUpdate = (event: Event) => {
     setEditingEvent(event);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setEditingEvent({ ...editingEvent, [e.target.name]: e.target.value });
+    setEditingEvent(prev => prev ? { ...prev, [e.target.name]: e.target.value } : null);
   };
 
   const handleSave = async () => {
-    if (editingEvent && editingEvent.id !== undefined) {
-      try {
-        const updatedEvent = await updateEvent(editingEvent.id, editingEvent);
-        if (updatedEvent !== undefined) {
-          setEvents(events.map((event: Event) => (event.id === updatedEvent.id ? updatedEvent : event)));
-        }
-        setEditingEvent(undefined);
-      } catch (error) {
-        console.error(error);
-      }
+    if (!editingEvent) return;
+
+    try {
+      const updatedEvent = await updateEvent(editingEvent.id, editingEvent);
+      setEvents(prevEvents => prevEvents.map(event => (event.id === updatedEvent.id ? updatedEvent as Event : event)));
+      setEditingEvent(null);
+    } catch (error) {
+      console.error("Error updating event:", error);
     }
   };
 
-  const handleDelete = async (id: string | number) => {
+  const handleDelete = async (id: number) => {
     try {
-      await deleteEvent(id.toString());
-      setEvents(events.filter(event => event.id !== id));
+      await deleteEvent(id);
+      setEvents(prevEvents => prevEvents.filter(event => event.id !== id));
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting event:", error);
     }
   };
 
@@ -60,16 +58,39 @@ const Home = () => {
         <p>Loading events...</p>
       ) : events.length > 0 ? (
         <div className="grid">
-          {events.map((event) => (
+          {events.map(event => (
             <div key={event.id} className="event-card">
               {editingEvent && editingEvent.id === event.id ? (
                 <div className="edit-form">
-                  <input type="text" name="name" value={editingEvent.title} onChange={handleChange} className="form-control" />
-                  <textarea name="description" value={editingEvent.description} onChange={handleChange} className="form-control" />
-                  <input type="datetime-local" name="date" value={editingEvent.date} onChange={handleChange} className="form-control" />
-                  <input type="text" name="location" value={editingEvent.location} onChange={handleChange} className="form-control" />
+                  <input
+                    type="text"
+                    name="title"
+                    value={editingEvent.title}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                  <textarea
+                    name="description"
+                    value={editingEvent.description}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                  <input
+                    type="datetime-local"
+                    name="date"
+                    value={editingEvent.date}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
+                  <input
+                    type="text"
+                    name="location"
+                    value={editingEvent.location}
+                    onChange={handleChange}
+                    className="form-control"
+                  />
                   <button onClick={handleSave} className="btn btn-success">Save</button>
-                  <button onClick={() => setEditingEvent(undefined)} className="btn btn-secondary">Cancel</button>
+                  <button onClick={() => setEditingEvent(null)} className="btn btn-secondary">Cancel</button>
                 </div>
               ) : (
                 <>

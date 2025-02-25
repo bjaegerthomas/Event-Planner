@@ -31,7 +31,7 @@ export const createEvent = async (event: Event) => {
 };
 
 // Delete an event (authenticated)
-export const deleteEvent = async (id: string) => {
+export const deleteEvent = async (id: number) => {
   try {
     const token = AuthService.getToken();
     await axios.delete(`${API_URL}/${id}`, {
@@ -45,12 +45,13 @@ export const deleteEvent = async (id: string) => {
 };
 
 // implement Updating events w/authenticated
-export const updateEvent = async (id: string | number, event: any) => {
+export const updateEvent = async (id: number, event: Event): Promise<Event> => {
   try {
     const token = AuthService.getToken();
-    await axios.put(`${API_URL}/${id}`, event, {
+    const { data } = await axios.put<Event>(`${API_URL}/${id}`, event, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    return data;
   } catch (error) {
     console.error('Error updating event:', error);
     throw error;
