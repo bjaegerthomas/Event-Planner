@@ -1,70 +1,38 @@
-'use strict';
+// Import Sequelize to establish a database connection and define models
+import { Sequelize } from 'sequelize';
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require('../config/config.js')[env]; // Using config.js instead of config.json
-const db = {};
+// Import configuration settings for database connection
+import configData from '../config/config.js';
 
-// Initialize Sequelize connection
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+// Import models for Users and Events
+import User from './User.js';
+import Event from './Event.js';
 
-// Dynamically import models from the current directory
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (
-      file.indexOf('.') !== 0 &&
-      file !== basename &&
-      file.slice(-3) === '.js' &&
-      file.indexOf('.test.js') === -1
-    );
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+// Select the appropriate configuration settings based on the environment (development, production, etc.)
+const config = configData[process.env.NODE_ENV || 'development'];
 
-// Import models explicitly
-const User = require('./User');
-const Event = require('./Event');
-const Rsvp = require('./Rsvp');
+// Create a new Sequelize instance using the database configuration
+const sequelize = new Sequelize(config.database, config.username, config.password, { 
+  host: config.host, // Set database host
+  dialect: config.dialect // Define the database dialect (PostgreSQL)
+});
 
-db.User = User;
-db.Event = Event;
-db.Rsvp = Rsvp;
+// Define relationships between models
+User.hasMany(Event, { foreignKey: 'createdBy', onDelete: 'CASCADE' }); 
+// A user can create multiple events. If the user is deleted, all associated events are removed.
 
-// Define Associations
-User.hasMany(Event, { foreignKey: 'created_by', onDelete: 'CASCADE' });
-Event.belongsTo(User, { foreignKey: 'created_by', onDelete: 'CASCADE' });
+Event.belongsTo(User, { foreignKey: 'createdBy', onDelete: 'CASCADE' }); 
+// Each event belongs to a user. If the user is deleted, remove all their events.
 
-User.hasMany(Rsvp, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Event.hasMany(Rsvp, { foreignKey: 'event_id', onDelete: 'CASCADE' });
-
-Rsvp.belongsTo(User, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Rsvp.belongsTo(Event, { foreignKey: 'event_id', onDelete: 'CASCADE' });
-
-// Sync models with the database
+// Function to sync the database models with the database
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true }); // Ensure tables are updated without losing data
+    await sequelize.sync({ alter: true }); // Sync models with database and alter tables if needed
     console.log('✅ Database synchronized successfully.');
   } catch (error) {
     console.error('❌ Error syncing database:', error);
   }
 };
 
-// Attach Sequelize and the sync function to the db object
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-db.syncDatabase = syncDatabase;
-
-module.exports = db;
+// Export the database connection and models so they can be used elsewhere in the application
+export { sequelize, User, Event, syncDatabase };
