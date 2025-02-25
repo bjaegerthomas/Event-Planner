@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { fetchEvents, updateEvent, deleteEvent } from "../api/eventsAPI"; // Import API functions
+import type { Event } from "../interfaces/event"; // Import Event interface
 
 const Home = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<Event[]>([] as Event[]);
   const [loading, setLoading] = useState(true);
-  const [editingEvent, setEditingEvent] = useState(null);
+  const [editingEvent, setEditingEvent] = useState<Partial<Event>>();
 
   useEffect(() => {
     const loadEvents = async () => {
       try {
-        const data = await fetchEvents();
+        const data = await fetchEvents() as Event[];
         setEvents(data);
       } catch (error) {
         console.error(error);
@@ -25,23 +26,27 @@ const Home = () => {
     setEditingEvent(event);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEditingEvent({ ...editingEvent, [e.target.name]: e.target.value });
   };
 
   const handleSave = async () => {
-    try {
-      const updatedEvent = await updateEvent(editingEvent.id, editingEvent);
-      setEvents(events.map(event => (event.id === updatedEvent.id ? updatedEvent : event)));
-      setEditingEvent(null);
-    } catch (error) {
-      console.error(error);
+    if (editingEvent && editingEvent.id !== undefined) {
+      try {
+        const updatedEvent = await updateEvent(editingEvent.id, editingEvent);
+        if (updatedEvent !== undefined) {
+          setEvents(events.map((event: Event) => (event.id === updatedEvent.id ? updatedEvent : event)));
+        }
+        setEditingEvent(undefined);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   const handleDelete = async (id: string | number) => {
     try {
-      await deleteEvent(id);
+      await deleteEvent(id.toString());
       setEvents(events.filter(event => event.id !== id));
     } catch (error) {
       console.error(error);
@@ -59,16 +64,16 @@ const Home = () => {
             <div key={event.id} className="event-card">
               {editingEvent && editingEvent.id === event.id ? (
                 <div className="edit-form">
-                  <input type="text" name="name" value={editingEvent.name} onChange={handleChange} className="form-control" />
+                  <input type="text" name="name" value={editingEvent.title} onChange={handleChange} className="form-control" />
                   <textarea name="description" value={editingEvent.description} onChange={handleChange} className="form-control" />
                   <input type="datetime-local" name="date" value={editingEvent.date} onChange={handleChange} className="form-control" />
                   <input type="text" name="location" value={editingEvent.location} onChange={handleChange} className="form-control" />
                   <button onClick={handleSave} className="btn btn-success">Save</button>
-                  <button onClick={() => setEditingEvent(null)} className="btn btn-secondary">Cancel</button>
+                  <button onClick={() => setEditingEvent(undefined)} className="btn btn-secondary">Cancel</button>
                 </div>
               ) : (
                 <>
-                  <h2>{event.name}</h2>
+                  <h2>{event.title}</h2>
                   <p>{event.description}</p>
                   <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
                   <p><strong>Location:</strong> {event.location}</p>
