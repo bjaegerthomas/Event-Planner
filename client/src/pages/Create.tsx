@@ -4,7 +4,8 @@ import { createEvent } from "../api/eventsAPI.ts"; // Import the API function
 
 const Create = () => {
   const [event, setEvent] = useState({
-    name: "",
+    id: 0,
+    title: "",
     description: "",
     date: "",
     location: "",
@@ -32,7 +33,7 @@ const Create = () => {
       <form onSubmit={handleSubmit} className="event-form">
         <div className="form-group">
           <label>Name:</label>
-          <input type="text" name="name" value={event.name} onChange={handleChange} className="form-control" required />
+          <input type="text" name="name" value={event.title} onChange={handleChange} className="form-control" required />
         </div>
         <div className="form-group">
           <label>Description:</label>
