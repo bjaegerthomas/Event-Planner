@@ -2,6 +2,7 @@ import axios from 'axios';
 import AuthService from '../utils/auth.ts';
 import type { Event } from '../interfaces/event.tsx';
 
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/events';
 
 
