@@ -1,35 +1,37 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database.js';
+import sequelize from '../config/database.js';
+import User from './User.js';
 
 const Event = sequelize.define('Event', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   description: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
+    allowNull: false,
   },
   date: {
-    type: DataTypes.STRING, // Added new column
-    allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   location: {
-    type: DataTypes.STRING, // Added new column
-    allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   createdBy: {
     type: DataTypes.UUID,
     allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id'
-    }
-  }
-});
+    references: { model: 'Users', key: 'id' },
+  },
+}, { timestamps: true });
+
+User.hasMany(Event, { foreignKey: 'createdBy', onDelete: 'CASCADE' });
+Event.belongsTo(User, { foreignKey: 'createdBy', onDelete: 'CASCADE' });
 
 export default Event;

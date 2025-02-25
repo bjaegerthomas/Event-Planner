@@ -1,33 +1,31 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database.js';
+import sequelize from '../config/database.js';
 
 const User = sequelize.define('User', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
   name: {
-    type: DataTypes.STRING, // Added new column
-    allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-    validate: {
-      isEmail: true
-    }
+    validate: { isEmail: true },
   },
   username: {
-    type: DataTypes.STRING, // Added new column
+    type: DataTypes.STRING,
     allowNull: false,
-    unique: true
+    unique: true,
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false
-  }
-});
+    allowNull: false,
+  },
+}, { timestamps: true });
 
 export default User;
