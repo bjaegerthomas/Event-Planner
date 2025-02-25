@@ -1,4 +1,3 @@
-// Defines the Event model for database storage
 import { DataTypes } from 'sequelize';
 import sequelize from './database.js';
 
@@ -6,20 +5,28 @@ const Event = sequelize.define('Event', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true // Unique identifier for each event
+    primaryKey: true
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false // Event must have a title
+    allowNull: false
   },
   description: {
-    type: DataTypes.TEXT // Optional event description
+    type: DataTypes.TEXT
+  },
+  date: {
+    type: DataTypes.STRING, // Added new column
+    allowNull: false
+  },
+  location: {
+    type: DataTypes.STRING, // Added new column
+    allowNull: false
   },
   createdBy: {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'Users', // References the Users table
+      model: 'Users',
       key: 'id'
     }
   }
