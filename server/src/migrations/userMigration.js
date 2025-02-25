@@ -1,4 +1,3 @@
-// Migration script to create Users table
 import { Sequelize } from 'sequelize';
 
 export const up = async (queryInterface) => {
@@ -6,22 +5,31 @@ export const up = async (queryInterface) => {
     id: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
-      primaryKey: true // Unique identifier for each user
+      primaryKey: true
+    },
+    name: {
+      type: Sequelize.STRING, // Added new column
+      allowNull: false
     },
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true // Ensures email is unique
+      unique: true
+    },
+    username: {
+      type: Sequelize.STRING, // Added new column
+      allowNull: false,
+      unique: true
     },
     password: {
       type: Sequelize.STRING,
-      allowNull: false // Password must be provided
+      allowNull: false
     },
-    createdAt: Sequelize.DATE, // Timestamp for when the record is created
-    updatedAt: Sequelize.DATE // Timestamp for last update
+    createdAt: Sequelize.DATE,
+    updatedAt: Sequelize.DATE
   });
 };
 
 export const down = async (queryInterface) => {
-  await queryInterface.dropTable('Users'); // Drops Users table if rollback is needed
+  await queryInterface.dropTable('Users');
 };

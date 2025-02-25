@@ -1,4 +1,3 @@
-// Defines the User model for database storage
 import { DataTypes } from 'sequelize';
 import sequelize from './database.js';
 
@@ -6,19 +5,28 @@ const User = sequelize.define('User', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true // Unique identifier for each user
+    primaryKey: true
+  },
+  name: {
+    type: DataTypes.STRING, // Added new column
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensures email is unique in the database
+    unique: true,
     validate: {
-      isEmail: true // Ensures valid email format
+      isEmail: true
     }
+  },
+  username: {
+    type: DataTypes.STRING, // Added new column
+    allowNull: false,
+    unique: true
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false // Stores hashed password for security
+    allowNull: false
   }
 });
 
