@@ -6,7 +6,7 @@ import type { Event } from "../interfaces/event.tsx";
 const API_URL =
   import.meta.env.VITE_API_URL ||
   (import.meta.env.PROD
-    ? "https://https://my-team-ep-tester.onrender.com/api/events"
+    ? "https://event-planner-anuy.onrender.com"
     : "http://localhost:5000/api/events");
 
 
