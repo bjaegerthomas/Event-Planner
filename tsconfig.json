@@ -30,5 +30,6 @@
     "outDir": "dist"
   },
   "include": ["client/src", "server/src"],
-  "exclude": ["node_modules", "dist"]
+
 }
+
