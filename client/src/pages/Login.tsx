@@ -1,7 +1,7 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
 import Auth from '../utils/auth';
-import { login } from '../api/authAPI';
-import type { UserLogin } from '../interfaces/UserLogin';
+import {login } from '../api/authAPI';
+import type { UserLogin } from '../interfaces/userLogin';
 
 const Login = () => {
   const [loginData, setLoginData] = useState<UserLogin>({
@@ -22,8 +22,12 @@ const Login = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const data = await login(loginData);
-      Auth.login(data.token);
+      const data = await login(loginData); // Await login function call
+      if (data && data.token) { // Ensure token exists before using it
+        Auth.login(data.token);
+      } else {
+        throw new Error('No token received from server');
+      }
     } catch (err) {
       console.error('Failed to login', err);
     }

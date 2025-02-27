@@ -1,5 +1,5 @@
 export interface Event {
-    id: number; 
+    id: string | number // adjusted typing
     title: string;
     description: string;
     date: string;
