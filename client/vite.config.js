@@ -16,7 +16,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://my-team-ep-tester.onrender.com",
+        target: "https://event-planner-anuy.onrender.com",
         changeOrigin: true,
         secure: false,
       },
