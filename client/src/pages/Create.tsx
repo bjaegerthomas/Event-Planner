@@ -32,19 +32,19 @@ const Create = () => {
       <h1 className="text-center my-4">Create New Event</h1>
       <form onSubmit={handleSubmit} className="event-form">
         <div className="form-group">
-          <label>Name:</label>
-          <input type="text" name="name" value={event.title} onChange={handleChange} className="form-control" required />
+          <label>Event Name:</label>
+          <input type="text" name="title" value={event.title} onChange={handleChange} className="form-control" required />
         </div>
         <div className="form-group">
-          <label>Description:</label>
+          <label>Description of Event:</label>
           <textarea name="description" value={event.description} onChange={handleChange} className="form-control" required />
         </div>
         <div className="form-group">
-          <label>Date:</label>
+          <label>Date and Time of Event:</label>
           <input type="datetime-local" name="date" value={event.date} onChange={handleChange} className="form-control" required />
         </div>
         <div className="form-group">
-          <label>Location:</label>
+          <label>Location for the Event:</label>
           <input type="text" name="location" value={event.location} onChange={handleChange} className="form-control" required />
         </div>
         <button type="submit" className="btn btn-primary">Save Event</button>
