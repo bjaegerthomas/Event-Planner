@@ -62,6 +62,12 @@ Event Planner is a full-stack web application that allows users to register, log
 - Render (Backend & Database)
 
 ## Installation & Setup
+Sample Login Credentials
+To test the login functionality, you can use the following sample username and password:
+- Username: `user1`
+- Password: `password1`
+
+You can use these credentials to log in after completing the setup and testing the app.
 
 #### Clone the repository
 
@@ -76,8 +82,8 @@ Event Planner is a full-stack web application that allows users to register, log
 
 Create an `.env` file in the root directory & add:
 
-- `DB_USER=postgres`
-- `DB_PASS=ClubGiggly`
+- `DB_USER=your_postgres_username`
+- `DB_PASS=your_postgres_password`
 - `DB_NAME=event_planner_db`
 - `DB_HOST=localhost`
 - `JWT_SECRET=your_secret_key`
